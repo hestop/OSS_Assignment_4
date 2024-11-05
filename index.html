@@ -114,7 +114,6 @@
             <div class="mb-3">
                 <label class="form-label">Item Name</label>
                 <input type="text" class="form-control" id="addName" required>
-                <div class="invalid-feedback">Please enter the item name.</div>
             </div>
             <div class="mb-3">
                 <label class="form-label">Category</label>
@@ -221,6 +220,8 @@
                 document.getElementById('modalOverlay').style.display = 'block';
                 document.getElementById('editModal').style.display = 'block';
             }
+            // 이전 검증 상태를 리셋합니다.
+            resetValidation('editForm');
         }
 
         function closeEditModal() {
