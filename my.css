@@ -24,7 +24,7 @@ body{
   position: relative;
   color: white;
   text-align: center;
-  background-image: url('./img/bg1.png');
+  background-image: url('https://raw.githubusercontent.com/hestop/OSS_Assignment_4/refs/heads/main/img/bg1.png');
   background-size: cover;
   background-position: center;
   padding-top: 200px;
@@ -56,7 +56,7 @@ body{
 .foot{
     position: relative;
     height: 900px;
-    background-image: url('./img/footer-image.jpg');
+    background-image: url('https://raw.githubusercontent.com/hestop/OSS_Assignment_4/refs/heads/main/img/footer-image.jpg');
     background-size: cover;
     background-position: center;
     font-size: large;
