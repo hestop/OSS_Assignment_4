@@ -228,8 +228,6 @@
             document.getElementById('editModal').style.display = 'none';
         }
 
-        // saveData() 함수 제거
-
         document.getElementById('editForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -332,7 +330,6 @@
             return isValid;
         }
 
-        // 유효성 검사 초기화
         function resetValidation(formId) {
             const form = document.getElementById(formId);
             Array.from(form.elements).forEach(function(element) {
@@ -341,7 +338,6 @@
             });
         }
 
-        // 입력 필드 실시간 유효성 검사
         document.querySelectorAll('#addForm input[required], #editForm input[required]').forEach(function(input) {
           input.addEventListener('input', function() {
               if (this.value.trim()) {
