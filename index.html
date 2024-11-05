@@ -151,7 +151,7 @@
         let gearData = [];
         function loadGearData() {
             const xhr = new XMLHttpRequest();
-            xhr.open('GET', 'my_data.json', true);
+            xhr.open('GET', 'https://6729689c6d5fa4901b6d0b4f.mockapi.io/', true);
             xhr.onload = function() {
                 if (xhr.status === 200) {
                     gearData = JSON.parse(xhr.responseText).gears;
