@@ -151,10 +151,10 @@
         let gearData = [];
         function loadGearData() {
             const xhr = new XMLHttpRequest();
-            xhr.open('GET', 'https://6729689c6d5fa4901b6d0b4f.mockapi.io/', true);
+            xhr.open('GET', 'my_data.json', true);
             xhr.onload = function() {
                 if (xhr.status === 200) {
-                    gearData = JSON.parse(xhr.responseText).gears;
+                    gearData = JSON.parse(xhr.responseText);
                     displayGears();
                 }
             };
@@ -224,7 +224,7 @@
             const xhr = new XMLHttpRequest();
             xhr.open('POST', 'save_data.php', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.send(JSON.stringify({ gears: gearData }));
+            xhr.send(JSON.stringify(gearData));
         }
 
         document.getElementById('editForm').addEventListener('submit', function(e) {
