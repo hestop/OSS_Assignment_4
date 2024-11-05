@@ -301,8 +301,6 @@
             xhr.onload = function() {
                 if (xhr.status === 201) {
                     const addedGear = JSON.parse(xhr.responseText);
-                    delete addedGear.createdAt;
-                    delete addedGear.avatar;
                     gearData.push(addedGear);
                     displayGears();
                     closeAddModal();
