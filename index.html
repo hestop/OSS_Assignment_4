@@ -151,7 +151,7 @@
         let gearData = [];
         function loadGearData() {
             const xhr = new XMLHttpRequest();
-            xhr.open('GET', 'my_data.json', true);
+            xhr.open('GET', 'https://6729689c6d5fa4901b6d0b4f.mockapi.io/my_data', true);
             xhr.onload = function() {
                 if (xhr.status === 200) {
                     gearData = JSON.parse(xhr.responseText);
@@ -193,14 +193,22 @@
 
         function deleteGear(id) {
             if (confirm('Are you sure you want to delete this item?')) {
-                gearData = gearData.filter(gear => gear.id !== id);
-                saveData();
-                displayGears();
+                const xhr = new XMLHttpRequest();
+                xhr.open('DELETE', `https://6729689c6d5fa4901b6d0b4f.mockapi.io/my_data/${id}`, true);
+                xhr.onload = function() {
+                    if (xhr.status === 200 || xhr.status === 204) {
+                        gearData = gearData.filter(gear => gear.id != id);
+                        displayGears();
+                    } else {
+                        alert('Failed to delete the gear item.');
+                    }
+                };
+                xhr.send();
             }
         }
 
         function openEditModal(id) {
-            const gear = gearData.find(g => g.id === id);
+            const gear = gearData.find(g => g.id == id);
             if (gear) {
                 document.getElementById('editId').value = gear.id;
                 document.getElementById('editName').value = gear.name;
@@ -220,12 +228,7 @@
             document.getElementById('editModal').style.display = 'none';
         }
 
-        function saveData() {
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', 'save_data.php', true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.send(JSON.stringify(gearData));
-        }
+        // saveData() 함수 제거
 
         document.getElementById('editForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -236,23 +239,32 @@
 
             const id = parseInt(document.getElementById('editId').value);
             const updatedGear = {
-                id: id,
                 name: document.getElementById('editName').value.trim(),
                 category: document.getElementById('editCategory').value.trim(),
                 weight: parseInt(document.getElementById('editWeight').value),
                 material: document.getElementById('editMaterial').value.trim(),
                 price: parseFloat(document.getElementById('editPrice').value),
                 feature: document.getElementById('editFeature').value.trim(),
-                image: gearData.find(g => g.id === id).image
+                image: gearData.find(g => g.id == id).image
             };
 
-            const index = gearData.findIndex(g => g.id === id);
-            if (index !== -1) {
-                gearData[index] = updatedGear;
-                saveData();
-                displayGears();
-                closeEditModal();
-            }
+            const xhr = new XMLHttpRequest();
+            xhr.open('PUT', `https://6729689c6d5fa4901b6d0b4f.mockapi.io/my_data/${id}`, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    const updatedGearFromServer = JSON.parse(xhr.responseText);
+                    const index = gearData.findIndex(g => g.id == id);
+                    if (index !== -1) {
+                        gearData[index] = updatedGearFromServer;
+                        displayGears();
+                        closeEditModal();
+                    }
+                } else {
+                    alert('Failed to update the gear item.');
+                }
+            };
+            xhr.send(JSON.stringify(updatedGear));
         });
 
         function openAddModal() {
@@ -274,9 +286,7 @@
                 return;
             }
 
-            const newId = gearData.length > 0 ? Math.max(...gearData.map(g => g.id)) + 1 : 1;
             const newGear = {
-                id: newId,
                 name: document.getElementById('addName').value.trim(),
                 category: document.getElementById('addCategory').value.trim(),
                 weight: parseInt(document.getElementById('addWeight').value),
@@ -286,10 +296,20 @@
                 image: document.getElementById('addImage').value.trim()
             };
 
-            gearData.push(newGear);
-            saveData();
-            displayGears();
-            closeAddModal();
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'https://6729689c6d5fa4901b6d0b4f.mockapi.io/my_data', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                if (xhr.status === 201) {
+                    const addedGear = JSON.parse(xhr.responseText);
+                    gearData.push(addedGear);
+                    displayGears();
+                    closeAddModal();
+                } else {
+                    alert('Failed to add the gear item.');
+                }
+            };
+            xhr.send(JSON.stringify(newGear));
         });
 
         function validateForm(formId) {
